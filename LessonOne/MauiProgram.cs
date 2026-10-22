@@ -21,6 +21,7 @@ namespace LessonOne
     		builder.Logging.AddDebug();
 #endif
             DBService.Init();
+            DBService.Connection.Insert(new Projects { Name = "abc", experements = "abc", reports = "abc" });
 
             return builder.Build();
         }

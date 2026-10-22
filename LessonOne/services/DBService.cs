@@ -11,6 +11,8 @@ namespace LessonOne.services
         {
             Connection = new(Path.Combine(FileSystem.AppDataDirectory, "db"));
             Connection.CreateTable<User>();
+            Connection.CreateTable<Departament>();
+            Connection.CreateTable<Projects>();
         }
     }
 }
