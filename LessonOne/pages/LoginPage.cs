@@ -50,5 +50,6 @@ public class LoginPage : ContentPage
     {
         DBService.CurrentUser = signedUser;
         Navigation.PushAsync(new UsersPage());
+        Navigation.PushAsync(new RegisterPage());
     }
 }
