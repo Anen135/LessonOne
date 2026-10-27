@@ -20,7 +20,7 @@ namespace LessonOne
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif
-            DBService.Init();
+            AppDataContext.Init();
 
             return builder.Build();
         }

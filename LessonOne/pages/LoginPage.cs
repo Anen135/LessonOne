@@ -48,7 +48,7 @@ public class LoginPage : ContentPage
 
     void SignIn(User signedUser)
     {
-        DBService.CurrentUser = signedUser;
+        AppDataContext.CurrentUser = signedUser;
         Navigation.PushAsync(new UsersPage());
         Navigation.PushAsync(new RegisterPage());
     }

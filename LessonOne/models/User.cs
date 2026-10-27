@@ -1,10 +1,9 @@
-using SQLite;
+
 
 namespace LessonOne.models;
 
 public class User
 {
-    [AutoIncrement, PrimaryKey]
     public int Id { get; set; }
     public string Login { get; set; }
     public string Password { get; set; }

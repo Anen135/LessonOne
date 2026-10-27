@@ -1,11 +1,13 @@
-﻿using System;
+﻿using LessonOne.models;
+using LessonOne.services;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Maui.Controls.Shapes;
+using Microsoft.Maui.Graphics.Text;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LessonOne.models;
-using Microsoft.Maui.Controls.Shapes;
-using Microsoft.Maui.Graphics.Text;
 
 namespace LessonOne.pages;
 
@@ -58,19 +60,7 @@ public class RegisterPage : ContentPage
             TextColor = Colors.White,
             HeightRequest = 48
         };
-        registerButton.Clicked += (s, e) =>
-        {
-            if (string.IsNullOrWhiteSpace(loginEntry.Text) || string.IsNullOrWhiteSpace(passwordEntry.Text) || string.IsNullOrWhiteSpace(confirmPasswordEntry.Text) || string.IsNullOrWhiteSpace(emailEntry.Text) || accessPicker.SelectedItem == null)
-            {
-                message.Text = "Fill all fields!";
-                message.TextColor = Colors.Red;
-            }else if(passwordEntry.Text != confirmPasswordEntry.Text)
-            {
-                message.Text = "passwords do not match";
-                message.TextColor = Colors.Red;
-            }
-            else { message.Text = "registration was successful";}
-        };
+        registerButton.Clicked += OnRegister;
         message.FontSize = 13;
         message.HorizontalOptions = LayoutOptions.Center;
         Border formCard = new()
@@ -96,7 +86,25 @@ public class RegisterPage : ContentPage
         };
     }
 
-    private Entry StyleingEntry(Entry entry)
+    private void OnRegister(object? sender, EventArgs e)
+    {
+        if (string.IsNullOrWhiteSpace(loginEntry.Text) || string.IsNullOrWhiteSpace(passwordEntry.Text) || string.IsNullOrWhiteSpace(confirmPasswordEntry.Text) || string.IsNullOrWhiteSpace(emailEntry.Text) || accessPicker.SelectedItem == null)
+        {
+            message.Text = "Fill all fields!";
+            message.TextColor = Colors.Red;
+        }else if(passwordEntry.Text != confirmPasswordEntry.Text)
+        {
+            message.Text = "passwords do not match";
+            message.TextColor = Colors.Red;
+        }
+        else { 
+            message.Text = "registration was successful";
+            AppDataContext.db.AddUser(new User { Email = emailEntry.Text, Access = (UserAccess)accessPicker.SelectedItem, Password = passwordEntry.Text, Login = loginEntry.Text });
+            AppDataContext.db.SaveChanges();
+        }
+    }
+
+private Entry StyleingEntry(Entry entry)
     {
         entry.BackgroundColor = Color.FromArgb("F5F7FC");
         entry.TextColor = Color.FromArgb("252B3A");

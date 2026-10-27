@@ -37,12 +37,13 @@ namespace LessonOne.view
                 {
                     throw new Exception("Password not Confirmed");
                 }
-                var users = DBService.Connection.Table<User>().Where(u => u.Login == Login && u.Password == Password);
-                if (users.Count() == 0)
+                var usrs = AppDataContext.db.GetUsers();
+                var user = AppDataContext.db.GetUserByLoginAndPassword(login,password);
+                if (user == null)
                 {
                     throw new Exception("Not Found");
                 }
-                onSuccess(users.First());
+                onSuccess(user);
 
             }
             catch (Exception ex)
