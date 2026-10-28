@@ -1,116 +1,162 @@
-﻿using LessonOne.models;
+using System.Net.Mail;
+using LessonOne.models;
 using LessonOne.services;
-using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Maui.Controls.Shapes;
-using Microsoft.Maui.Graphics.Text;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LessonOne.pages;
 
 public class RegisterPage : ContentPage
 {
-    Entry loginEntry = new();
-    Entry passwordEntry = new();
-    Entry confirmPasswordEntry = new();
-    Entry emailEntry = new();
-    Picker accessPicker = new() { ItemsSource = Enum.GetValues<UserAccess>() };
-    Label message = new();
+    private readonly Entry loginEntry = new() { Placeholder = "Login", AutomationId = "RegisterLoginEntry" };
+    private readonly Entry passwordEntry = new() { Placeholder = "Password", IsPassword = true, AutomationId = "RegisterPasswordEntry" };
+    private readonly Entry confirmPasswordEntry = new() { Placeholder = "Confirm password", IsPassword = true, AutomationId = "ConfirmPasswordEntry" };
+    private readonly Entry emailEntry = new() { Placeholder = "Email", Keyboard = Keyboard.Email, AutomationId = "EmailEntry" };
+    private readonly Picker accessPicker = new()
+    {
+        Title = "Access level",
+        ItemsSource = Enum.GetValues<UserAccess>(),
+        SelectedItem = UserAccess.Low,
+        TextColor = Color.FromArgb("#252B3A"),
+        BackgroundColor = Color.FromArgb("#F5F7FC"),
+        TitleColor = Color.FromArgb("#555555")
+    };
+    private readonly Label message = new() { FontSize = 13, TextColor = Colors.DarkRed };
+    private readonly Button registerButton = new() { Text = "Sign up", AutomationId = "RegisterButton" };
 
     public RegisterPage()
     {
-        Title = "Registation";
+        Title = "Create account";
         BackgroundColor = Color.FromArgb("#2463EB");
         Content = Build();
     }
 
-    View Build()
+    private View Build()
     {
-        loginEntry.Placeholder = "Login";
-        passwordEntry.Placeholder = "Password";
-        passwordEntry.IsPassword = true;
-        confirmPasswordEntry.Placeholder = "Confirm password";
-        confirmPasswordEntry.IsPassword = true;
-        emailEntry.Placeholder = "Email";
-        emailEntry.Keyboard = Keyboard.Email;
-        StyleingEntry(loginEntry);
-        StyleingEntry(passwordEntry);
-        StyleingEntry(emailEntry);
-        StyleingEntry(confirmPasswordEntry);
-        Label formTitle = new() { Text ="Create account", FontSize = 27, FontAttributes = FontAttributes.Bold, TextColor = Color.FromArgb("#3974E8"), HorizontalOptions = LayoutOptions.Center, Margin = new Thickness(0,0,0,15)};
-        Label welcomeTitle = new() { Text = "Get started", FontSize = 38, FontAttributes = FontAttributes.Bold, TextColor = Colors.White, HorizontalOptions = LayoutOptions.Center };
-        Label welcomeText = new() { Text = "Already have an account?", FontSize = 15, TextColor = Color.FromRgba("#DCE7FF"), HorizontalOptions = LayoutOptions.Center };
-        Button loginButton = new() { Text = "Log in", WidthRequest = 150, HeightRequest = 45, BackgroundColor = Colors.Transparent, TextColor = Colors.White, BorderColor = Colors.White, BorderWidth = 1.5, CornerRadius = 22 };
-
-        Label accesspic = new Label() { Text = "Choose access level"};
-
-
-
-
-        Button registerButton = new()
+        foreach (var entry in new[] { loginEntry, passwordEntry, confirmPasswordEntry, emailEntry })
         {
-            Text = "Sign up",
-            FontSize = 16,
-            FontAttributes = FontAttributes.Bold,
-            BackgroundColor = Color.FromArgb("#3867F5"),
-            CornerRadius = 8,
-            TextColor = Colors.White,
-            HeightRequest = 48
-        };
+            entry.BackgroundColor = Color.FromArgb("#F5F7FC");
+            entry.TextColor = Color.FromArgb("#252B3A");
+            entry.PlaceholderColor = Color.FromArgb("#9AA3B3");
+            entry.HeightRequest = 48;
+        }
+
         registerButton.Clicked += OnRegister;
-        message.FontSize = 13;
-        message.HorizontalOptions = LayoutOptions.Center;
-        Border formCard = new()
+        var loginButton = new Button { Text = "Already have an account? Log in" };
+        loginButton.Clicked += async (_, _) => await Shell.Current.GoToAsync("..");
+
+        return new ScrollView
         {
-            BackgroundColor = Colors.White,
-            Stroke = Colors.Transparent, 
-            StrokeShape = new RoundRectangle { CornerRadius = 18},
-            Padding = new Thickness(30,35), 
-            Shadow = new Shadow { Brush = Colors.Black, Offset = new Point(0,5), Radius =15,Opacity= 0.15f},
-            Content = new VerticalStackLayout { Spacing = 15, Children = {formTitle, new Label{Text = "email",FontSize = 13, TextColor = Color.FromArgb("#555555")},emailEntry, new Label { Text = "Password", FontSize =13, TextColor = Color.FromArgb("#555555") }, passwordEntry, new Label { Text = "confirm password",FontSize=13,TextColor= Color.FromArgb("#555555")}, confirmPasswordEntry, new Label { Text = "full name", FontSize = 13, TextColor = Color.FromArgb("#555555") }, loginEntry, registerButton,message }
-            }
-        };
-        return new StackLayout
-        {
-            Padding = 25,
-            Spacing = 15,
-            VerticalOptions = LayoutOptions.Center,
-            Children =
+            Content = new VerticalStackLayout
             {
-                new Label{Text = "account creation",FontSize =26, FontAttributes = FontAttributes.Bold, HorizontalOptions = LayoutOptions.Center},
-                loginEntry, passwordEntry, confirmPasswordEntry, emailEntry, accessPicker, registerButton,message
+                Padding = 24,
+                Spacing = 20,
+                VerticalOptions = LayoutOptions.Center,
+                HorizontalOptions = LayoutOptions.Center,
+                MaximumWidthRequest = 500,
+                Children =
+                {
+                    new Label
+                    {
+                        Text = "Get started",
+                        TextColor = Colors.White,
+                        FontSize = 32,
+                        FontAttributes = FontAttributes.Bold,
+                        HorizontalTextAlignment = TextAlignment.Center
+                    },
+                    new Border
+                    {
+                        BackgroundColor = Colors.White,
+                        Stroke = Colors.Transparent,
+                        StrokeShape = new RoundRectangle { CornerRadius = 18 },
+                        Padding = 28,
+                        Content = new VerticalStackLayout
+                        {
+                            Spacing = 16,
+                            Children =
+                            {
+                                new Label
+                                {
+                                    Text = "Create account",
+                                    FontSize = 26,
+                                    FontAttributes = FontAttributes.Bold,
+                                    TextColor = Color.FromArgb("#3974E8")
+                                },
+                                loginEntry,
+                                emailEntry,
+                                passwordEntry,
+                                confirmPasswordEntry,
+                                accessPicker,
+                                message,
+                                registerButton,
+                                loginButton
+                            }
+                        }
+                    }
+                }
             }
         };
     }
 
-    private void OnRegister(object? sender, EventArgs e)
+    private async void OnRegister(object? sender, EventArgs e)
     {
-        if (string.IsNullOrWhiteSpace(loginEntry.Text) || string.IsNullOrWhiteSpace(passwordEntry.Text) || string.IsNullOrWhiteSpace(confirmPasswordEntry.Text) || string.IsNullOrWhiteSpace(emailEntry.Text) || accessPicker.SelectedItem == null)
+        message.Text = string.Empty;
+        var login = loginEntry.Text?.Trim() ?? string.Empty;
+        var email = emailEntry.Text?.Trim() ?? string.Empty;
+        var password = passwordEntry.Text ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(password)
+            || string.IsNullOrWhiteSpace(confirmPasswordEntry.Text) || string.IsNullOrWhiteSpace(email)
+            || accessPicker.SelectedItem is not UserAccess access)
         {
-            message.Text = "Fill all fields!";
-            message.TextColor = Colors.Red;
-        }else if(passwordEntry.Text != confirmPasswordEntry.Text)
-        {
-            message.Text = "passwords do not match";
-            message.TextColor = Colors.Red;
+            message.Text = "Fill in all fields.";
+            return;
         }
-        else { 
-            message.Text = "registration was successful";
-            AppDataContext.db.AddUser(new User { Email = emailEntry.Text, Access = (UserAccess)accessPicker.SelectedItem, Password = passwordEntry.Text, Login = loginEntry.Text });
-            AppDataContext.db.SaveChanges();
-        }
-    }
 
-private Entry StyleingEntry(Entry entry)
-    {
-        entry.BackgroundColor = Color.FromArgb("F5F7FC");
-        entry.TextColor = Color.FromArgb("252B3A");
-        entry.PlaceholderColor = Color.FromArgb("9AA3B3A");
-        entry.HeightRequest = 45;
-        entry.Margin = new Thickness(0, 0, 0, 5);
-        return entry;
+        if (password != confirmPasswordEntry.Text)
+        {
+            message.Text = "Passwords do not match.";
+            return;
+        }
+
+        if (!MailAddress.TryCreate(email, out var address) || address.Address != email)
+        {
+            message.Text = "Enter a valid email address.";
+            return;
+        }
+
+        registerButton.IsEnabled = false;
+        try
+        {
+            if (AppDataContext.db.LoginExists(login))
+            {
+                message.Text = "This login is already registered.";
+                return;
+            }
+
+            var user = new User { Login = login, Password = password, Email = email, Access = access };
+            AppDataContext.db.AddUser(user);
+            try
+            {
+                AppDataContext.db.SaveChanges();
+            }
+            catch
+            {
+                AppDataContext.db.Entry(user).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
+                throw;
+            }
+
+            passwordEntry.Text = string.Empty;
+            confirmPasswordEntry.Text = string.Empty;
+            await DisplayAlert("Account created", "You can now log in with your login and password.", "OK");
+            await Shell.Current.GoToAsync("..");
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex);
+            message.Text = "Unable to create the account. Please try again.";
+        }
+        finally
+        {
+            registerButton.IsEnabled = true;
+        }
     }
 }

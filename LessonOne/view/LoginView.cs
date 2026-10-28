@@ -1,55 +1,69 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LessonOne.models;
 using LessonOne.services;
 
-namespace LessonOne.view
+namespace LessonOne.view;
+
+public partial class LoginView : ObservableObject
 {
-    public partial class LoginView : ObservableObject
+    private string login = string.Empty;
+
+    private string password = string.Empty;
+
+    private string message = string.Empty;
+
+    public string Login
     {
-        [ObservableProperty]
-        string login = "";
-        [ObservableProperty]
-        string password = "";
-        [ObservableProperty]
-        string confirmPassword = "";
-        [ObservableProperty]
-        string message = "";
+        get => login;
+        set => SetProperty(ref login, value);
+    }
 
-        Action<User> onSuccess;
+    public string Password
+    {
+        get => password;
+        set => SetProperty(ref password, value);
+    }
 
-        public LoginView(Action<User> scs)
+    public string Message
+    {
+        get => message;
+        set => SetProperty(ref message, value);
+    }
+
+    private readonly Func<User, Task> onSuccess;
+
+    public LoginView(Func<User, Task> onSuccess)
+    {
+        this.onSuccess = onSuccess;
+    }
+
+    [RelayCommand]
+    private async Task LoginAsync()
+    {
+        Message = string.Empty;
+        if (string.IsNullOrWhiteSpace(Login) || string.IsNullOrWhiteSpace(Password))
         {
-            onSuccess = scs;
+            Message = "Enter your login and password.";
+            return;
         }
 
-
-        [RelayCommand]
-        void onLogin()
+        try
         {
-            try
+            var user = AppDataContext.db.GetUserByLoginAndPassword(Login.Trim(), Password);
+            if (user is null)
             {
-                if (string.IsNullOrEmpty(Login) || string.IsNullOrEmpty(Password))
-                {
-                    throw new Exception("Login or password is null");
-                }
-                if (Password != ConfirmPassword)
-                {
-                    throw new Exception("Password not Confirmed");
-                }
-                var usrs = AppDataContext.db.GetUsers();
-                var user = AppDataContext.db.GetUserByLoginAndPassword(login,password);
-                if (user == null)
-                {
-                    throw new Exception("Not Found");
-                }
-                onSuccess(user);
+                Message = "Incorrect login or password.";
+                return;
+            }
 
-            }
-            catch (Exception ex)
-            {
-                Message = ex.Message;
-            }
+            await onSuccess(user);
+            Password = string.Empty;
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex);
+            Message = "Unable to sign in. Please try again.";
         }
     }
 }
