@@ -1,5 +1,6 @@
 ﻿using LessonOne.models;
 using LessonOne.services;
+using MauiApp2.Services;
 using Microsoft.Extensions.Logging;
 
 namespace LessonOne
@@ -20,8 +21,8 @@ namespace LessonOne
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif
-            DBService.Init();
-            DBService.Connection.Insert(new Projects { Name = "abc", experements = "abc", reports = "abc" });
+            AppDataControl.Init();
+            //DBService.Connection.Insert(new Projects { Name = "abc", experements = "abc", reports = "abc" });
 
             return builder.Build();
         }

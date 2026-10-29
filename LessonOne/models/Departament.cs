@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LessonOne.models
 {
-    internal class Departament
+    public class Departament
     {
         [AutoIncrement, PrimaryKey]
         public int Id { get; set; }

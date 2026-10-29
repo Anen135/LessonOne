@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LessonOne.models
 {
-    internal class Projects
+    public class Projects
     {
         [AutoIncrement, PrimaryKey]
         public int Id { get; set; }
