@@ -1,6 +1,5 @@
 ﻿using LessonOne.models;
 using LessonOne.services;
-using MauiApp2.Services;
 using Microsoft.Extensions.Logging;
 
 namespace LessonOne

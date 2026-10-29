@@ -17,7 +17,7 @@ public class DepartametPage : ContentPage
 
     private View Build()
     {
-        var deps = DBService.Connection.Table<Departament>().ToList();
+        var deps = 
         var CollectionDeps = new CollectionView();
         CollectionDeps.ItemsSource = deps;
         CollectionDeps.ItemTemplate = new DataTemplate(() =>

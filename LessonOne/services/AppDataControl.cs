@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MauiApp2.Services
+namespace LessonOne.services
 {
 
     public class AppDataControl : DbContext
@@ -23,6 +23,9 @@ namespace MauiApp2.Services
         }
 
         public List<User> GetUsers() => db.Users.ToList();
+
+        public List<Departament> GetDepartament() => db.Departament.ToList();
+
         public User GetUserById(int id) => db.Users.FirstOrDefault(u => u.Id == id);
         public void AdUser(User newUser) => db.Users.Add(newUser);
         public void SaveChanges() => base.SaveChanges();
