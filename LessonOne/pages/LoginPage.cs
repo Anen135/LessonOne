@@ -27,11 +27,11 @@ public class LoginPage : ContentPage
         var messageLabel = new Label();
         var button = new Button { Text = "Войти" };
 
-        usernameEntry.SetBinding(Entry.TextProperty, nameof(LoginView.Login));
-        passwordEntry.SetBinding(Entry.TextProperty, nameof(LoginView.Password));
-        confirmPasswordEntry.SetBinding(Entry.TextProperty, nameof(LoginView.ConfirmPassword));
-        messageLabel.SetBinding(Label.TextProperty, nameof(LoginView.Message));
-        button.SetBinding(Button.CommandProperty, nameof(LoginView.onLoginCommand));
+        usernameEntry.SetBinding(Entry.TextProperty, nameof(LoginView.Login), BindingMode.TwoWay);
+        passwordEntry.SetBinding(Entry.TextProperty, nameof(LoginView.Password), BindingMode.TwoWay);
+        confirmPasswordEntry.SetBinding(Entry.TextProperty, nameof(LoginView.ConfirmPassword), BindingMode.TwoWay);
+        messageLabel.SetBinding(Label.TextProperty, nameof(LoginView.Message), BindingMode.TwoWay);
+        button.SetBinding(Button.CommandProperty, nameof(LoginView.onLoginCommand), BindingMode.TwoWay);
         return new VerticalStackLayout
         {
             Children =
@@ -49,7 +49,8 @@ public class LoginPage : ContentPage
     void SignIn(User signedUser)
     {
         AppDataContext.CurrentUser = signedUser;
-        Navigation.PushAsync(new UsersPage());
-        Navigation.PushAsync(new RegisterPage());
+        //Navigation.PushAsync(new UsersPage());
+        //Navigation.PushAsync(new RegisterPage());
+        Navigation.PushAsync(new DepartametPage());
     }
 }

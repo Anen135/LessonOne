@@ -37,8 +37,8 @@ namespace LessonOne.view
                 {
                     throw new Exception("Password not Confirmed");
                 }
-                var usrs = AppDataContext.db.GetUsers();
-                var user = AppDataContext.db.GetUserByLoginAndPassword(login,password);
+                var usr = AppDataContext.db.GetUsers();
+                var user = AppDataContext.db.GetUserByLoginAndPassword(Login, Password);
                 if (user == null)
                 {
                     throw new Exception("Not Found");

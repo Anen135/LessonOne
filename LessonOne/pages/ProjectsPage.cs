@@ -17,7 +17,7 @@ public class ProjectsPage : ContentPage
     }
     private View Build()
     {
-        var deps = DBService.Connection.Table<Projects>().ToList();
+        var deps = AppDataContext.db.Projects;
         var CollectionDeps = new CollectionView();
         CollectionDeps.ItemsSource = deps;
         CollectionDeps.ItemTemplate = new DataTemplate(() =>

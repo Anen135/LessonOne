@@ -15,9 +15,9 @@ public class DepartametPage : ContentPage
         Content = Build();
     }
 
-    private View Build()
+    View Build()
     {
-        var deps = 
+        var deps = AppDataContext.db.GetDepartament().ToList();
         var CollectionDeps = new CollectionView();
         CollectionDeps.ItemsSource = deps;
         CollectionDeps.ItemTemplate = new DataTemplate(() =>
