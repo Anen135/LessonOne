@@ -73,6 +73,24 @@ public class RegisterPage : ContentPage
             Content = new VerticalStackLayout { Spacing = 15, Children = {formTitle, new Label{Text = "email",FontSize = 13, TextColor = Color.FromArgb("#555555")},emailEntry, new Label { Text = "Password", FontSize =13, TextColor = Color.FromArgb("#555555") }, passwordEntry, new Label { Text = "confirm password",FontSize=13,TextColor= Color.FromArgb("#555555")}, confirmPasswordEntry, new Label { Text = "full name", FontSize = 13, TextColor = Color.FromArgb("#555555") }, loginEntry, registerButton,message }
             }
         };
+        Border leftPanel = new()
+        {
+            BackgroundColor = Color.FromArgb("#3867F5"),
+            Stroke = Colors.Transparent,
+            StrokeShape = new RoundRectangle { CornerRadius = 18 },
+            Padding = 25,
+            Content = new VerticalStackLayout { Spacing = 20, VerticalOptions = LayoutOptions.Center, Children = { welcomeText, welcomeTitle, loginButton } }
+        };
+        Grid mainGrid = new()
+        {
+            ColumnDefinitions = { new ColumnDefinition { Width = new GridLength(1.1, GridUnitType.Star) } },
+            ColumnSpacing = 20,
+            Padding = 25,
+            Children = { leftPanel, formCard }
+        };
+        Grid.SetColumn(leftPanel, 0);
+        Grid.SetColumn(formCard, 1);
+        
         return new StackLayout
         {
             Padding = 25,
@@ -81,7 +99,7 @@ public class RegisterPage : ContentPage
             Children =
             {
                 new Label{Text = "account creation",FontSize =26, FontAttributes = FontAttributes.Bold, HorizontalOptions = LayoutOptions.Center},
-                loginEntry, passwordEntry, confirmPasswordEntry, emailEntry, accessPicker, registerButton,message
+                loginEntry, passwordEntry, confirmPasswordEntry, emailEntry, accessPicker, registerButton,message, formCard,leftPanel,mainGrid
             }
         };
     }

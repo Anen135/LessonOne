@@ -29,7 +29,7 @@ namespace LessonOne.services
         public User GetUserById(int id) =>db.Users.FirstOrDefault(u=>u.Id==id);
         public User GetUserByLoginAndPassword(string login, string password)=> db.Users.FirstOrDefault(u => u.Password==password && u.Login==login);
         public void AddUser(User newUser) => db.Users.Add(newUser);
-        public void SaveChanges() => db.SaveChanges();
+        public void SaveChanges() => base.SaveChanges();
         public static User CurrentUser = null;
     }
 }

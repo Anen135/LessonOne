@@ -50,6 +50,6 @@ public class LoginPage : ContentPage
     {
         AppDataContext.CurrentUser = signedUser;
         Navigation.PushAsync(new UsersPage());
-        Navigation.PushAsync(new RegisterPage());
+       
     }
 }
