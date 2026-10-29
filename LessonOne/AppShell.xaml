@@ -6,6 +6,7 @@
     xmlns:local="clr-namespace:LessonOne.pages"
     FlyoutBehavior="Disabled"
     Title="LessonOne">
+	
 
 	<ShellContent
         Title="Log in"

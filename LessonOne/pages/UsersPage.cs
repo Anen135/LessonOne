@@ -47,25 +47,7 @@ public class UsersPage : ContentPage
             ItemsSource = vm.Users,
             EmptyView = "No users found.",
             SelectionMode = SelectionMode.None,
-            ItemTemplate = new DataTemplate(() =>
-            {
-                var loginLabel = new Label { FontAttributes = FontAttributes.Bold, FontSize = 18 };
-                loginLabel.SetBinding(Label.TextProperty, nameof(User.Login));
-                var emailLabel = new Label();
-                emailLabel.SetBinding(Label.TextProperty, nameof(User.Email));
-                var accessLabel = new Label { FontSize = 13 };
-                accessLabel.SetBinding(Label.TextProperty, new Binding(nameof(User.Access), stringFormat: "Access: {0}"));
-                return new Border
-                {
-                    Padding = 16,
-                    Margin = new Thickness(0, 0, 0, 10),
-                    Content = new VerticalStackLayout
-                    {
-                        Spacing = 6,
-                        Children = { loginLabel, emailLabel, accessLabel }
-                    }
-                };
-            })
+            ItemTemplate = new DataTemplate(() => BuildUserView())
         };
         var logoutButton = new Button { Text = "Log out", AutomationId = "LogoutButton" };
         logoutButton.Clicked += async (_, _) =>
@@ -101,5 +83,34 @@ public class UsersPage : ContentPage
         layout.Add(users, 0, 2);
         layout.Add(logoutButton, 0, 3);
         return layout;
+    }
+
+    private object BuildUserView()
+    {
+        var loginLabel = new Label { FontAttributes = FontAttributes.Bold, FontSize = 18 };
+        loginLabel.SetBinding(Label.TextProperty, nameof(User.Login));
+        var emailLabel = new Label();
+        emailLabel.SetBinding(Label.TextProperty, nameof(User.Email));
+        var accessLabel = new Label { FontSize = 13 };
+        accessLabel.SetBinding(Label.TextProperty, new Binding(nameof(User.Access), stringFormat: "Access: {0}"));
+        Button btn = new();
+        btn.Text = "change some information";
+        btn.Clicked += (s, _) =>
+        {
+            User usr = null;
+            Button _b = s as Button;
+            usr = _b.BindingContext as User;
+            Navigation.PushAsync(new UserDetailPage(usr));
+        };
+        return new Border
+        {
+            Padding = 16,
+            Margin = new Thickness(0, 0, 0, 10),
+            Content = new VerticalStackLayout
+            {
+                Spacing = 6,
+                Children = { loginLabel, emailLabel, accessLabel, btn }
+            }
+        };
     }
 }
