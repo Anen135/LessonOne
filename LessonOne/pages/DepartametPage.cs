@@ -1,31 +1,44 @@
-﻿using LessonOne.models;
+﻿using CommunityToolkit.Maui.Markup;
+using LessonOne.models;
 using LessonOne.services;
+using LessonOne.view;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace LessonOne.pages;
 
 public class DepartametPage : ContentPage
 {
+    DepartametView vm;
     public DepartametPage()
     {
+        vm = new DepartametView();
+        vm.Load();
+        BindingContext = vm;
         Content = Build();
     }
 
     private View Build()
     {
-        var deps = 
-        var CollectionDeps = new CollectionView();
-        CollectionDeps.ItemsSource = deps;
-        CollectionDeps.ItemTemplate = new DataTemplate(() =>
+        CollectionView DepartamentCollection = new CollectionView()
         {
-            var depName = new Label() { Margin = 40};
-            depName.SetBinding(Label.TextProperty, nameof(Departament.Name));
-            return new StackLayout { depName  };
+            ItemsSource = vm.Departaments,
+        };
+
+        DepartamentCollection.ItemTemplate = new DataTemplate(() =>
+        {
+            return new HorizontalStackLayout
+            {
+                new Label { Margin = 40}.Bind(nameof(Departament.Name))
+            };
         });
-        return CollectionDeps;
+        return new StackLayout
+        {
+            DepartamentCollection
+        };
     }
 }
