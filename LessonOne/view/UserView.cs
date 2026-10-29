@@ -10,7 +10,7 @@ public class UserView : ObservableObject
     public ObservableCollection<User> Users { get; set; } = new();
     public void Load()
     {
-        var usrs = DBService.Connection.Table<User>().ToList();
+        var usrs = AppDataContext.Connection.Table<User>().ToList();
         foreach (var user in usrs)
         {
             Users.Add(user);

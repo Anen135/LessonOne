@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using LessonOne.models;
 using LessonOne.services;
+using Microsoft.EntityFrameworkCore;
 
 namespace LessonOne.view
 {
@@ -37,12 +38,12 @@ namespace LessonOne.view
                 {
                     throw new Exception("Password not Confirmed");
                 }
-                var users = DBService.Connection.Table<User>().Where(u => u.Login == Login && u.Password == Password);
-                if (users.Count() == 0)
+                var user = AppDataContext.db.Users.FirstOrDefault(u => u.Login == Login && u.Password == Password);
+                if (user == null)
                 {
                     throw new Exception("Not Found");
                 }
-                onSuccess(users.First());
+                onSuccess(user);
 
             }
             catch (Exception ex)
