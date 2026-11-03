@@ -1,4 +1,3 @@
-﻿using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +8,6 @@ namespace LessonOne.models
 {
     public class Departament
     {
-        [AutoIncrement, PrimaryKey]
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public int employers { get; set; } = 0;

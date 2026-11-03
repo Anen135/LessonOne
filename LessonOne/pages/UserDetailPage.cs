@@ -1,61 +1,35 @@
-﻿
 using LessonOne.models;
 using LessonOne.view;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LessonOne.pages;
 
 public class UserDetailPage : ContentPage
 {
-    UserDetailView vm = new();
     public UserDetailPage(User user)
     {
-        Title = "Изменение пользователя";
+        Title = "Edit profile";
+        var vm = new UserDetailView(user);
         BindingContext = vm;
-        Content = Build();
-        BackgroundColor = Color.FromArgb("#2463EB");
-    }
-
-    private View Build()
-    {
-
-        Entry loginEntry = new() { Placeholder = "enter login", BackgroundColor = Color.FromArgb("F5F7FC"), TextColor = Color.FromArgb("252B3A"), HeightRequest = 48 };
-        loginEntry.SetBinding(Entry.TextProperty, nameof(UserDetailView.UserLogin), BindingMode.TwoWay);
-        Entry passwordEntry = new() { Placeholder = "enter password", IsPassword = true, BackgroundColor = Color.FromArgb("F5F7FC"), TextColor = Color.FromArgb("252B3A"), PlaceholderColor = Color.FromArgb("9AA3B2"), HeightRequest = 48 };
-        passwordEntry.SetBinding(Entry.TextProperty, nameof(UserDetailView.UserPassword), BindingMode.TwoWay);
-        Entry emailEntry = new() { Placeholder = "enter email", Keyboard = Keyboard.Email, BackgroundColor = Color.FromArgb("F5F7FC"), TextColor = Color.FromArgb("252B3A"), PlaceholderColor = Color.FromArgb("9AA3B2"), HeightRequest = 48 };
-        emailEntry.SetBinding(Entry.TextProperty, nameof(UserDetailView.UserEmail), BindingMode.TwoWay);
-        Label welcomeText = new()
+        var login = new Entry { Placeholder = "Login" };
+        login.SetBinding(Entry.TextProperty, nameof(UserDetailView.UserLogin));
+        var password = new Entry { Placeholder = "Password", IsPassword = true };
+        password.SetBinding(Entry.TextProperty, nameof(UserDetailView.UserPassword));
+        var email = new Entry { Placeholder = "Email", Keyboard = Keyboard.Email };
+        email.SetBinding(Entry.TextProperty, nameof(UserDetailView.UserEmail));
+        var message = new Label { TextColor = Colors.DarkRed };
+        var save = new Button { Text = "Save" };
+        save.Clicked += async (_, _) =>
         {
-            Text = "Manage your personal information",
-            FontSize = 15,
-            TextColor = Color.FromArgb("#DCE7FF"),
-            HorizontalTextAlignment = TextAlignment.Center
+            save.IsEnabled = false;
+            try { vm.Save(); await Navigation.PopAsync(); }
+            catch (InvalidOperationException ex) { message.Text = ex.Message; }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex);
+                message.Text = "Unable to save the profile.";
+            }
+            finally { save.IsEnabled = true; }
         };
-        Button profileButton = new()
-        {
-            BackgroundColor = Colors.Transparent,
-            TextColor = Colors.White,
-            BorderColor = Colors.White,
-            BorderWidth = 1.5,
-            CornerRadius = 22,
-            HeightRequest = 45
-        };
-        Label formTitle = new()
-        {
-            Text = "edit profile",
-            FontSize = 27,
-            FontAttributes = FontAttributes.Bold,
-            TextColor = Color.FromArgb("#3974E8"),
-            HorizontalOptions = LayoutOptions.Center
-        };
-        return new StackLayout
-        { 
-            loginEntry, passwordEntry, emailEntry, welcomeText, profileButton, formTitle
-        };
+        Content = new VerticalStackLayout { Padding = 24, Spacing = 16, Children = { login, password, email, message, save } };
     }
 }

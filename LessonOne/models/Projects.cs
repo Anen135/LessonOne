@@ -1,4 +1,3 @@
-﻿using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +8,10 @@ namespace LessonOne.models
 {
     public class Projects
     {
-        [AutoIncrement, PrimaryKey]
         public int Id { get; set; }
-        public string Name {  get; set; }
-        public string reports { get; set; }
-        public string experements { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string reports { get; set; } = string.Empty;
+        public string experements { get; set; } = string.Empty;
 
     }
 }

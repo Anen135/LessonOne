@@ -13,12 +13,13 @@ public class ProjectsPage : ContentPage
 {
     public ProjectsPage()
     {
+        Title = "Projects";
         Content = Build();
     }
     private View Build()
     {
-        var deps = AppDataContext.db.Projects;
-        var CollectionDeps = new CollectionView();
+        var deps = AppDataContext.db.Projects.OrderBy(project => project.Name).ToList();
+        var CollectionDeps = new CollectionView { EmptyView = "No projects found." };
         CollectionDeps.ItemsSource = deps;
         CollectionDeps.ItemTemplate = new DataTemplate(() =>
         {

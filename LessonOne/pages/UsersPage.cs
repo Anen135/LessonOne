@@ -66,6 +66,11 @@ public class UsersPage : ContentPage
             }
         };
 
+        var departmentsButton = new Button { Text = "Departments" };
+        departmentsButton.Clicked += async (_, _) => await Navigation.PushAsync(new DepartametPage());
+        var projectsButton = new Button { Text = "Projects" };
+        projectsButton.Clicked += async (_, _) => await Navigation.PushAsync(new ProjectsPage());
+        var actions = new HorizontalStackLayout { Spacing = 12, Children = { departmentsButton, projectsButton, logoutButton } };
         var layout = new Grid
         {
             Padding = 24,
@@ -81,7 +86,7 @@ public class UsersPage : ContentPage
         layout.Add(signedInLabel, 0, 0);
         layout.Add(message, 0, 1);
         layout.Add(users, 0, 2);
-        layout.Add(logoutButton, 0, 3);
+        layout.Add(actions, 0, 3);
         return layout;
     }
 
@@ -94,13 +99,11 @@ public class UsersPage : ContentPage
         var accessLabel = new Label { FontSize = 13 };
         accessLabel.SetBinding(Label.TextProperty, new Binding(nameof(User.Access), stringFormat: "Access: {0}"));
         Button btn = new();
-        btn.Text = "change some information";
-        btn.Clicked += (s, _) =>
+        btn.Text = "Edit profile";
+        btn.Clicked += async (sender, _) =>
         {
-            User usr = null;
-            Button _b = s as Button;
-            usr = _b.BindingContext as User;
-            Navigation.PushAsync(new UserDetailPage(usr));
+            if (sender is Button { BindingContext: User user })
+                await Navigation.PushAsync(new UserDetailPage(user));
         };
         return new Border
         {

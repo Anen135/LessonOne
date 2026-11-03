@@ -1,44 +1,47 @@
-﻿using LessonOne.models;
+using LessonOne.models;
 using LessonOne.services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Intrinsics.Arm;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LessonOne.pages;
 
 public class DepartametPage : ContentPage
 {
+    private readonly DepartametView vm = new();
+    private readonly Label message = new() { TextColor = Colors.DarkRed };
+
     public DepartametPage()
     {
-        Content = Build();
+        Title = "Departments";
+        var items = new CollectionView
+        {
+            ItemsSource = vm.Departaments,
+            EmptyView = "No departments found.",
+            ItemTemplate = new DataTemplate(() =>
+            {
+                var name = new Label { VerticalOptions = LayoutOptions.Center };
+                name.SetBinding(Label.TextProperty, nameof(Departament.Name));
+                var edit = new Button { Text = "Edit" };
+                edit.Clicked += async (sender, _) =>
+                {
+                    if (sender is Button { BindingContext: Departament department })
+                        await Navigation.PushAsync(new DepartamentDetailPage(department));
+                };
+                return new HorizontalStackLayout { Spacing = 16, Children = { name, edit } };
+            })
+        };
+        var grid = new Grid { Padding = 24, RowSpacing = 16, RowDefinitions = { new RowDefinition(GridLength.Auto), new RowDefinition(GridLength.Star) } };
+        grid.Add(message, 0, 0);
+        grid.Add(items, 0, 1);
+        Content = grid;
     }
 
-    View Build()
+    protected override void OnAppearing()
     {
-        var deps = AppDataContext.db.GetDepartament().ToList();
-        var CollectionDeps = new CollectionView();
-        CollectionDeps.ItemsSource = deps;
-        CollectionDeps.ItemTemplate = new DataTemplate(() => 
-        { // Departanebt Item
-            Label label = new();
-            Button Detail = new();
-            Departament dep = new();
-            Detail.Clicked += (_, __) =>
-            {
-                Navigation.PushAsync(new DepartamentDetailPage(dep));
-            };
-            StackLayout stlayout = new() { label, Detail };
-            stlayout.BindingContextChanged += (s, e) =>
-            {
-                dep = stlayout.BindingContext as Departament;
-                label.Text = dep.Name;
-
-            };
-            return stlayout;
-        });
-        return CollectionDeps;
+        base.OnAppearing();
+        try { vm.Load(); message.Text = string.Empty; }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex);
+            message.Text = "Unable to load departments.";
+        }
     }
 }

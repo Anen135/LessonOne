@@ -15,6 +15,11 @@ public class AppDataContext : DbContext
 
     public DbSet<User> Users => Set<User>();
 
+    public DbSet<Departament> Departament => Set<Departament>();
+    public DbSet<Projects> Projects => Set<Projects>();
+
+    public List<Departament> GetDepartament() => Departament.OrderBy(item => item.Name).ToList();
+
     public AppDataContext()
     {
     }
@@ -51,6 +56,20 @@ public class AppDataContext : DbContext
         try
         {
             context.Database.EnsureCreated();
+            // EnsureCreated does not add tables to an existing users database.
+            using (var transaction = context.Database.BeginTransaction())
+            {
+                context.Database.ExecuteSqlRaw("""
+                    CREATE TABLE IF NOT EXISTS "Departament" (
+                        "Id" INTEGER NOT NULL CONSTRAINT "PK_Departament" PRIMARY KEY AUTOINCREMENT,
+                        "Name" TEXT NOT NULL, "employers" INTEGER NOT NULL,
+                        "materials" TEXT NOT NULL, "reports" TEXT NOT NULL);
+                    CREATE TABLE IF NOT EXISTS "Projects" (
+                        "Id" INTEGER NOT NULL CONSTRAINT "PK_Projects" PRIMARY KEY AUTOINCREMENT,
+                        "Name" TEXT NOT NULL, "reports" TEXT NOT NULL, "experements" TEXT NOT NULL);
+                    """);
+                transaction.Commit();
+            }
             database = context;
         }
         catch
