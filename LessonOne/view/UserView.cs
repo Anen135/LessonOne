@@ -11,7 +11,7 @@ public class UserView : ObservableObject
     public void Load()
     {
         //var usrs = DBService.Connection.Table<User>().ToList();
-        var users = services.AppDataControl.Table<User>()
+        var users = AppDataControl.db.Users.ToList();
 
         foreach (var user in users)
         {
