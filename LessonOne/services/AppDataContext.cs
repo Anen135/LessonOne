@@ -12,6 +12,7 @@ namespace LessonOne.services
     {
         public static AppDataContext db = null;
         public static User CurrentUser = null;
+        public static object Connection;
 
         public DbSet<User> Users => Set<User>();
 
