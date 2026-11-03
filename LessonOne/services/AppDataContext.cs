@@ -14,7 +14,7 @@ namespace LessonOne.services
         public DbSet<User> Users => Set<User>();
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("DataSource=app.db");
+            optionsBuilder.UseSqlite("DataSource=app2.db");
         }
         public DbSet<Projects> Projects => Set<Projects>();
 

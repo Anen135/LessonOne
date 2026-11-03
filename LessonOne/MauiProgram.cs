@@ -21,7 +21,7 @@ namespace LessonOne
     		builder.Logging.AddDebug();
 #endif
             AppDataContext.Init();
-            AppDataContext.db.AddUser(new models.User() { Login = "admin", Password = "admin", Access = models.UserAccess.High });
+            AppDataContext.db.Departament.Add(new Departament() { Name = "Departament " + AppDataContext.db.Departament.Count()});
             AppDataContext.db.SaveChanges();
 
             return builder.Build();
