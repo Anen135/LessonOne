@@ -21,6 +21,8 @@ namespace LessonOne
     		builder.Logging.AddDebug();
 #endif
             AppDataContext.Init();
+            AppDataContext.db.Departament.Add(new Departament() { Name = "Departament " + AppDataContext.db.Departament.Count()});
+            AppDataContext.db.SaveChanges();
 
             return builder.Build();
         }

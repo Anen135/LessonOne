@@ -1,4 +1,6 @@
-﻿namespace LessonOne
+﻿using LessonOne.services;
+
+namespace LessonOne
 {
     public partial class App : Application
     {
