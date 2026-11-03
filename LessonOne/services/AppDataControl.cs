@@ -15,6 +15,14 @@ namespace LessonOne.services
         public DbSet<Projects> Projects => Set<Projects>();
 
         public DbSet<Departament> Departament => Set<Departament>();
+
+        public static User CurrentUser { get; internal set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlite("DataSource=app2.db");
+        }
+
         public static void Init()
         {
             if (db != null) return;

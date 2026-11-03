@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LessonOne.models;
+using LessonOne.pages;
 using LessonOne.services;
 
 namespace LessonOne.view
@@ -37,7 +38,8 @@ namespace LessonOne.view
                 {
                     throw new Exception("Password not Confirmed");
                 }
-                var users = DBService.Connection.Table<User>().Where(u => u.Login == Login && u.Password == Password);
+                //var users = DBService.Connection.Table<User>().Where(u => u.Login == Login && u.Password == Password);
+                var users = AppDataControl.db.Users.Where(u => u.Login == Login && u.Password == Password);
                 if (users.Count() == 0)
                 {
                     throw new Exception("Not Found");
