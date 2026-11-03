@@ -7,10 +7,11 @@ namespace LessonOne.view;
 
 public class UserView : ObservableObject
 {
-    public ObservableCollection<User> Users { get; set; } = new();
+    public ObservableCollection<User> Users { get; } = new();
     public void Load()
     {
         var usrs = AppDataContext.db.GetUsers();
+        Users.Clear();
         foreach (var user in usrs)
         {
             Users.Add(user);
