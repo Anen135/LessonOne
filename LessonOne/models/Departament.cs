@@ -11,8 +11,9 @@ namespace LessonOne.models
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public int employers { get; set; } = 0;
-        public string materials { get; set; } = string.Empty;
-        public string reports { get; set; } = string.Empty;
 
+        public ICollection<Materials> Materials { get; set; } = new List<Materials>();
+
+        //Сюда материалы
     }
 }

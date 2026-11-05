@@ -10,8 +10,10 @@ namespace LessonOne.models
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
-        public string reports { get; set; } = string.Empty;
-        public string experements { get; set; } = string.Empty;
 
+        public ICollection<Experiment> Experiment { get; set; } = new List<Experiment>();
+        public ICollection<Reports> Reports { get; set; } = new List<Reports>();
+        
+        //сюда эксперементы и репорты
     }
 }
