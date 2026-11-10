@@ -14,6 +14,11 @@ public class DepartametPage : ContentPage
         Title = "Departments";
         BackgroundColor = Color.FromArgb("#F2F5FC");
         vm.Load();
+        Button new_department = new() 
+        {
+            Text = "Add department"
+        };
+        new_department.Clicked += async (_, _) => await Navigation.PushAsync(new DepartamentCreatePage());
         Label title = new()
         {
             Text = "Our Departaments",
@@ -107,7 +112,7 @@ public class DepartametPage : ContentPage
         message.TextColor = Colors.DarkRed;
         Content = new ScrollView
         {
-            Content = new VerticalStackLayout { Padding = 22, Spacing = 22, Children = { header, listTitle, items, message} }
+            Content = new VerticalStackLayout { Padding = 22, Spacing = 22, Children = { header, listTitle, items, new_department, message} }
         };
     }
 

@@ -34,7 +34,7 @@ public class AppDataContext : DbContext
         {
             var connectionString = new SqliteConnectionStringBuilder
             {
-                DataSource = Path.Combine(FileSystem.AppDataDirectory, "app.db")
+                DataSource = Path.Combine(FileSystem.AppDataDirectory, "app123.db")
             }.ToString();
             optionsBuilder.UseSqlite(connectionString);
         }
