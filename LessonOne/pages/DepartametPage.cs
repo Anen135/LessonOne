@@ -109,11 +109,6 @@ public class DepartametPage : ContentPage
         {
             Content = new VerticalStackLayout { Padding = 22, Spacing = 22, Children = { header, listTitle, items, message} }
         };
-        var grid = new Grid { Padding = 24, RowSpacing = 16, RowDefinitions = { new RowDefinition(GridLength.Auto), new RowDefinition(GridLength.Star) } };
-        grid.Add(message, 0, 0);
-        grid.Add(items, 0, 1);
-        Content = grid;
-        
     }
 
     protected override void OnAppearing()
